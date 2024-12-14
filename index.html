@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Showcase</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>Product Showcase</h1>
+  </header>
+  <div class="container">
+    <button id="fetchProducts">Load Products</button>
+    <div class="products" id="products"></div>
+  </div>
+  <footer>
+    © 2024 Product Showcase. All Rights Reserved.
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#fetchProducts').click(function () {
+        $.ajax({
+          url: 'https://dummyjson.com/products',
+          method: 'GET',
+          success: function (response) {
+            const productsContainer = $('#products');
+            productsContainer.empty(); // Clear any existing content
+            response.products.forEach(product => {
+              const productCard = `
+                <div class="product-card">
+                  <img src="${product.thumbnail}" alt="${product.title}">
+                  <h3>${product.title}</h3>
+                  <p>${product.description}</p>
+                  <span>$${product.price}</span>
+                </div>
+              `;
+              productsContainer.append(productCard);
+            });
+            // Disable button after loading products
+            $('#fetchProducts').prop('disabled', true).text('Products Loaded');
+          },
+          error: function () {
+            alert('Error fetching data. Please try again later.');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
